@@ -1,5 +1,20 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException;
+from pydantic import BaseModel;
 app = FastAPI()
+
+
+class Carta(BaseModel):
+    remitent: str
+    destinatari: str
+    contingut: str
+    personatge: str
+cartes=[]
+
+@app.post("/cartas")
+def crear_carta(carta:Carta):
+    cartes.append(carta)
+    return carta
+
 
 @app.get("/")
 def root():
@@ -7,15 +22,11 @@ def root():
 
 @app.get("/cartes")
 def llistar_cartes(limit: int =10,offset:int =0, personaje: str|None=None):
-    cartes=[
-        {"id": 1, "remitent": "Maria", "contingut": "Hola, com estàs?"},
-        {"id": 2, "remitent": "Joan", "contingut": "T'escric des del passat."},
-        {"id": 3, "remitent": "Xavi", "contingut": "Xavi es un chivi"}
-    ]
+    resultat=cartes
 
     if personaje:
-            cartes=[carta for carta in cartes if carta["remitent"]==personaje]
-    return cartes[offset:offset+limit]
+            resultat=[carta for carta in resultat if carta.personatge==personaje]
+    return resultat[offset:offset+limit]
 
 @app.get("/cartes/{id}")
 def obtenir_carta(id:int):
@@ -29,3 +40,6 @@ def obtenir_carta(id:int):
         if c["id"] == id:
             return c
     raise HTTPException(status_code=404, detail="Carta no encontrada")
+
+
+

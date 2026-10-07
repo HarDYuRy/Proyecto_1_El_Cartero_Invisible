@@ -3,6 +3,12 @@ body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 20px;
+
+    /* Para mantener el footer abajo */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 h1 {
@@ -15,13 +21,19 @@ section {
     padding: 16px;
 }
 
-button:active{
+button:active {
     transform: scale(0.95);
 }
+
 button:hover {
     background-color: plum;
 }
 
+main {
+    flex: 1;
+}
+
+/* Cartas */
 .carta {
     border: 1px solid #ccc;
     padding: 16px;
@@ -32,6 +44,32 @@ button:hover {
     transition: box-shadow 0.2s;
 }
 
-.carta:hover{
+.carta:hover {
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Buzón fijo en la esquina inferior derecha */
+#buzon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #8B4513;
+    color: white;
+    padding: 16px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 100;
+}
+
+/* Cartas utilizando float */
+#contenidorCartes .carta {
+    float: left;
+    width: 45%;
+    margin: 2.5%;
+}
+
+/* Footer abajo del todo */
+footer {
+    text-align: center;
+    padding: 20px;
 }

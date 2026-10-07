@@ -1,34 +1,58 @@
 <!DOCTYPE html>
 <html lang="ca">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Cartero Invisible</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <button id="btnSaluda">Saluda'm!</button>
-    <button id="btnPresenta":active>Me presento</button>
+    <button id="btnPresenta">Me presento</button>
+
+    <header>
+        <h1 id="principalTitle">El Cartero Invisible</h1>
+    </header>
+
+    <p class="info">Bienvenido a tu buzón virtual</p>
+
+    <div class="carta">
+        <h3>De: Maria</h3>
+        <p>Hola, com estàs? T'escric des del passat.</p>
+    </div>
+
+    <main>
+
+        <!-- Buzón -->
+        <div id="buzon">
+            <span>📮</span>
+        </div>
+
+        <!-- Aquí se mostrarán las cartas -->
+        <div id="contenidorCartes"></div>
+
+        <!-- Botón para añadir una carta de prueba -->
+        <button id="btnAfegir">Afegir carta de prova</button>
+
+        <section id="llistatCartes">
+            <!-- de moment buit: aquí aniran les cartes -->
+        </section>
+
+        <section id="formulariCarta">
+            <!-- de moment buit: aquí anirà el formulari -->
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 El Cartero Invisible</p>
+    </footer>
+
     <script src="script.js" defer></script>
-<header>
-    <h1 id="principalTitle">El Cartero Invisible</h1>
-</header>
-<div id="contenidorCartes"></div>
-<p class="info">Bienvenido a tu buzón virtual</p>
-<div class="carta">
-    <h3>De: Maria</h3>
-    <p>Hola, com estàs? T'escric des del passat.</p>
-</div>
-<main>
-    <section id="llistatCartes">
-    <!-- de moment buit: aquí aniran les cartes -->
-    </section>
-    <section id="formulariCarta">
-    <!-- de moment buit: aquí anirà el formulari -->
-    </section>
-</main>
-<footer>
-    <p>&copy; 2026 El Cartero Invisible</p>
-</footer>
+
 </body>
+
 </html>
