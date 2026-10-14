@@ -15,6 +15,36 @@ test('renderitza les cartes correctament', () => {
     expect(cartesElements[0].querySelector('h3').textContent).toBe('De: Maria');
     expect(cartesElements[0].querySelector('p').textContent).toBe('Hola!');
 });
+
+import userEvent from '@testing-library/user-event';
+
+test("delegació d'events: elimina carta en clicar el botó", async () => {
+    document.body.innerHTML = `
+        <div id="contenidorCartes">
+            <div class="carta" data-id="1">
+                <button class="btn-eliminar">Eliminar</button>
+            </div>
+        </div>
+    `;
+
+    // Simula la teva funció de delegació
+    const contenidor = document.getElementById('contenidorCartes');
+
+    contenidor.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-eliminar')) {
+            const carta = e.target.closest('.carta');
+            carta.remove();
+        }
+    });
+
+    const user = userEvent.setup();
+    const btn = document.querySelector('.btn-eliminar');
+
+    await user.click(btn);
+
+    expect(document.querySelectorAll('.carta').length).toBe(0);
+});
+
 // TESTS NUEVOS
 
 // test("cada carta té un span amb el seu ID", () => {

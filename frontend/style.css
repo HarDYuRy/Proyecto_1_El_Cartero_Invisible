@@ -1,75 +1,353 @@
+
+/* ==================================
+   ESTILOS GENERALES
+================================== */
+
 body {
     background-color: #f4f1ea;
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 20px;
-
-    /* Para mantener el footer abajo */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
 }
 
-h1 {
-    color: #2c3e50;
-    font-size: 2.5rem;
+
+/* ==================================
+    CABECERA PRINCIPAL
+================================== */
+
+header {
+    background-color: #e7e1d6;
+    margin: -20px -20px 20px -20px;
+    padding: 25px 20px;
+    border-bottom: 3px solid #344e68;
 }
+
+h1 {
+    color: #1b2c3d;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
 
 section {
     margin: 20px 0;
     padding: 16px;
 }
 
-button:active {
-    transform: scale(0.95);
+main {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* ==================================
+   BOTONES GENERALES
+================================== */
+
+button {
+    background-color: #344e68;
+    color: white;
+    border: 1px solid #344e68;
+    border-radius: 8px;
+    padding: 11px 20px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 button:hover {
-    background-color: plum;
+    background-color: #486783;
+    border-color: #486783;
+    box-shadow: 0 3px 8px rgba(30, 50, 70, 0.15);
+    transform: translateY(-1px);
 }
 
-main {
-    flex: 1;
+button:active {
+    background-color: #263c51;
+    transform: scale(0.97);
+    box-shadow: none;
 }
 
-/* Cartas */
+button:focus-visible {
+    outline: 3px solid #8aacc8;
+    outline-offset: 3px;
+}
+
+
+/* ==================================
+   BOTONES DE PRESENTACIÓN
+================================== */
+
+.botones-presentacion {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#btnSaluda,
+#btnPresenta {
+    width: auto;
+    padding: 7px 14px;
+    font-size: 13px;
+    border-radius: 7px;
+}
+
+
+/* ==================================
+   CARTA DE EJEMPLO
+================================== */
+
 .carta {
     border: 1px solid #ccc;
     padding: 16px;
     margin: 8px 0;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.2s;
 }
 
 .carta:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Buzón fijo en la esquina inferior derecha */
+
+/* ==================================
+   BARRA DE ACCIONES
+================================== */
+
+.barra-acciones {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    background-color: #f4f1ea;
+    padding: 12px 0;
+    margin-bottom: 20px;
+}
+
+#btnAfegir,
+#btnMostrarTaula {
+    width: auto;
+    padding: 11px 20px;
+}
+
+
+/* ==================================
+   DISTRIBUCIÓN PRINCIPAL
+================================== */
+
+.layout-cartes {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 30px;
+    align-items: start;
+}
+
+.zona-cartes {
+    min-width: 0;
+}
+
+
+/* ==================================
+   CARTAS DINÁMICAS (2 COLUMNAS)
+================================== */
+
+#contenidorCartes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+#contenidorCartes .carta {
+    float: none;
+    width: auto;
+    margin: 0;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+}
+
+
+/* ==================================
+   BOTÓN ELIMINAR
+================================== */
+
+.btn-eliminar {
+    display: block;
+    width: fit-content;
+    padding: 9px 16px;
+    margin-top: 10px;
+    background-color: #637789;
+    border-color: #637789;
+}
+
+.btn-eliminar:hover {
+    background-color: #4c6072;
+    border-color: #4c6072;
+}
+
+
+/* ==================================
+   FORMULARIO LATERAL
+================================== */
+
+.zona-formulario {
+    position: sticky;
+    top: 85px;
+    align-self: start;
+
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+#formulariCarta:empty {
+    display: none;
+}
+
+#formCarta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 100%;
+    margin: 0;
+}
+
+#formCarta h3 {
+    margin: 0 0 12px;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+#formCarta input,
+#formCarta textarea {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 14px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+#formCarta input:focus,
+#formCarta textarea:focus {
+    outline: 2px solid #8aacc8;
+    border-color: #486783;
+}
+
+#formCarta textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#formCarta button {
+    width: 100%;
+    padding: 11px 20px;
+}
+
+
+/* ==================================
+   TABLA DE CARTAS
+================================== */
+
+#taulaCartes {
+    display: none;
+    margin: 20px 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
+}
+
+#taulaCartes table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+#taulaCartes th,
+#taulaCartes td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: left;
+}
+
+#taulaCartes th {
+    background-color: #e3f2fd;
+    color: #2c3e50;
+}
+
+
+/* ==================================
+   BUZÓN FIJO
+================================== */
+
 #buzon {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #8B4513;
+    background-color: #8B4513;
     color: white;
     padding: 16px;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     z-index: 100;
 }
 
-/* Cartas utilizando float */
-#contenidorCartes .carta {
-    float: left;
-    width: 45%;
-    margin: 2.5%;
-}
 
-/* Footer abajo del todo */
+/* ==================================
+   FOOTER
+================================== */
+
 footer {
     text-align: center;
     padding: 20px;
+}
+
+
+/* ==================================
+   DISEÑO RESPONSIVE
+================================== */
+
+@media (max-width: 850px) {
+
+    .layout-cartes {
+        grid-template-columns: 1fr;
+    }
+
+    #contenidorCartes {
+        grid-template-columns: 1fr;
+    }
+
+    .zona-formulario {
+        position: static;
+        width: auto;
+    }
+
+    .barra-acciones {
+        flex-wrap: wrap;
+    }
 }
