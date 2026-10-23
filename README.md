@@ -5,7 +5,7 @@
 iniciar uvicorn backend:
   - uvicorn main:app --reload
 iniciar test backend:
-  - cd 
+  - python -m pytest -v 
 iniciar test frontend:
   - npm test
 -------------------------------

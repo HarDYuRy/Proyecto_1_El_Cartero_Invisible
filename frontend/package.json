@@ -7,8 +7,9 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
 },
   "jest": {
-    "testEnvironment": "jsdom"
-  },
+  "testEnvironment": "jsdom",
+  "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"]
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

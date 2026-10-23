@@ -1,10 +1,37 @@
+/* PALETA: cambia --color-principal (por ejemplo, #344e68) para probar otro tema.
+   Los tonos relacionados se actualizan automaticamente en toda la aplicacion. */
+:root {
+    --color-principal: #256454;
+    --color-superficie: #ffffff;
+    --color-negro: #000000;
+    --color-fondo: #f4f1ea;
+    --color-cabecera: color-mix(in srgb, var(--color-principal) 12%, var(--color-fondo));
+    --color-titulo: color-mix(in srgb, var(--color-principal) 55%, var(--color-negro));
+    --color-texto: color-mix(in srgb, var(--color-principal) 40%, var(--color-negro));
+    --color-hover: color-mix(in srgb, var(--color-principal) 85%, var(--color-negro));
+    --color-activo: color-mix(in srgb, var(--color-principal) 70%, var(--color-negro));
+    --color-foco: color-mix(in srgb, var(--color-principal) 55%, var(--color-superficie));
+    --color-borde: color-mix(in srgb, var(--color-principal) 25%, var(--color-superficie));
+    --color-borde-suave: color-mix(in srgb, var(--color-principal) 16%, var(--color-superficie));
+    --color-secundario: color-mix(in srgb, var(--color-principal) 80%, var(--color-negro));
+    --color-secundario-hover: color-mix(in srgb, var(--color-principal) 65%, var(--color-negro));
+    --color-tabla-cabecera: color-mix(in srgb, var(--color-principal) 14%, var(--color-superficie));
+    --color-fila-alterna: color-mix(in srgb, var(--color-principal) 5%, var(--color-superficie));
+    --color-fila-hover: color-mix(in srgb, var(--color-principal) 12%, var(--color-superficie));
+    --sombra-boton: color-mix(in srgb, var(--color-principal) 15%, transparent);
+    --sombra-carta: rgba(0, 0, 0, 0.1);
+    --sombra-carta-hover: rgba(0, 0, 0, 0.2);
+    --sombra-formulario: rgba(0, 0, 0, 0.08);
+    --sombra-buzon: rgba(0, 0, 0, 0.3);
+}
 
 /* ==================================
    ESTILOS GENERALES
 ================================== */
 
 body {
-    background-color: #f4f1ea;
+    color: var(--color-texto);
+    background-color: var(--color-fondo);
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
     padding: 20px;
@@ -20,14 +47,14 @@ body {
 ================================== */
 
 header {
-    background-color: #e7e1d6;
+    background-color: var(--color-cabecera);
     margin: -20px -20px 20px -20px;
     padding: 25px 20px;
-    border-bottom: 3px solid #344e68;
+    border-bottom: 3px solid var(--color-principal);
 }
 
 h1 {
-    color: #1b2c3d;
+    color: var(--color-titulo);
     font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
@@ -52,9 +79,9 @@ main {
 ================================== */
 
 button {
-    background-color: #344e68;
-    color: white;
-    border: 1px solid #344e68;
+    background-color: var(--color-principal);
+    color: var(--color-superficie);
+    border: 1px solid var(--color-principal);
     border-radius: 8px;
     padding: 11px 20px;
     font-family: inherit;
@@ -69,20 +96,20 @@ button {
 }
 
 button:hover {
-    background-color: #486783;
-    border-color: #486783;
-    box-shadow: 0 3px 8px rgba(30, 50, 70, 0.15);
+    background-color: var(--color-hover);
+    border-color: var(--color-hover);
+    box-shadow: 0 3px 8px var(--sombra-boton);
     transform: translateY(-1px);
 }
 
 button:active {
-    background-color: #263c51;
+    background-color: var(--color-activo);
     transform: scale(0.97);
     box-shadow: none;
 }
 
 button:focus-visible {
-    outline: 3px solid #8aacc8;
+    outline: 3px solid var(--color-foco);
     outline-offset: 3px;
 }
 
@@ -112,17 +139,18 @@ button:focus-visible {
 ================================== */
 
 .carta {
-    border: 1px solid #ccc;
+    position: relative;
+    border: 1px solid var(--color-borde);
     padding: 16px;
     margin: 8px 0;
     border-radius: 8px;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-superficie);
+    box-shadow: 0 2px 4px var(--sombra-carta);
     transition: box-shadow 0.2s;
 }
 
 .carta:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px var(--sombra-carta-hover);
 }
 
 
@@ -140,7 +168,7 @@ button:focus-visible {
     top: 0;
     z-index: 50;
 
-    background-color: #f4f1ea;
+    background-color: var(--color-fondo);
     padding: 12px 0;
     margin-bottom: 20px;
 }
@@ -179,6 +207,7 @@ button:focus-visible {
 }
 
 #contenidorCartes .carta {
+    position: relative;
     float: none;
     width: auto;
     margin: 0;
@@ -197,13 +226,13 @@ button:focus-visible {
     width: fit-content;
     padding: 9px 16px;
     margin-top: 10px;
-    background-color: #637789;
-    border-color: #637789;
+    background-color: var(--color-secundario);
+    border-color: var(--color-secundario);
 }
 
 .btn-eliminar:hover {
-    background-color: #4c6072;
-    border-color: #4c6072;
+    background-color: var(--color-secundario-hover);
+    border-color: var(--color-secundario-hover);
 }
 
 
@@ -216,11 +245,11 @@ button:focus-visible {
     top: 85px;
     align-self: start;
 
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: var(--color-superficie);
+    border: 1px solid var(--color-borde-suave);
     border-radius: 12px;
     padding: 18px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 3px 10px var(--sombra-formulario);
 }
 
 #formulariCarta:empty {
@@ -237,14 +266,14 @@ button:focus-visible {
 
 #formCarta h3 {
     margin: 0 0 12px;
-    color: #2c3e50;
+    color: var(--color-texto);
     font-size: 18px;
 }
 
 #formCarta input,
 #formCarta textarea {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-borde);
     border-radius: 5px;
     font-family: inherit;
     font-size: 14px;
@@ -254,8 +283,8 @@ button:focus-visible {
 
 #formCarta input:focus,
 #formCarta textarea:focus {
-    outline: 2px solid #8aacc8;
-    border-color: #486783;
+    outline: 2px solid var(--color-foco);
+    border-color: var(--color-hover);
 }
 
 #formCarta textarea {
@@ -285,19 +314,19 @@ button:focus-visible {
 #taulaCartes table {
     width: 100%;
     border-collapse: collapse;
-    background-color: white;
+    background-color: var(--color-superficie);
 }
 
 #taulaCartes th,
 #taulaCartes td {
-    border: 1px solid #ccc;
+    border: 1px solid var(--color-borde);
     padding: 12px;
     text-align: left;
 }
 
 #taulaCartes th {
-    background-color: #e3f2fd;
-    color: #2c3e50;
+    background-color: var(--color-tabla-cabecera);
+    color: var(--color-texto);
 }
 
 
@@ -309,12 +338,12 @@ button:focus-visible {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #8B4513;
-    color: white;
+    background-color: var(--color-principal);
+    color: var(--color-superficie);
     padding: 16px;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 100;
+    box-shadow: 0 4px 12px var(--sombra-buzon);
+    z-index: 1000;
 }
 
 
@@ -350,4 +379,56 @@ footer {
     .barra-acciones {
         flex-wrap: wrap;
     }
+}
+
+/* Filas alternas y resumen del contenido de las cartas. */
+#taulaCartes tbody tr:nth-child(even) {
+    background-color: var(--color-fila-alterna);
+}
+
+#taulaCartes tbody tr:hover {
+    background-color: var(--color-fila-hover);
+}
+
+.contingut-cell {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+}
+/* Decoraciones: prueba content: "📩" o content: "CORREO" para variar el dibujo. */
+.carta::before {
+    content: "✉";
+    content: "✉" / "";
+    display: block;
+    width: fit-content;
+    margin-bottom: 8px;
+    color: var(--color-principal);
+    font-size: 1.75rem;
+    line-height: 1;
+    pointer-events: none;
+}
+
+#buzon::after {
+    content: "★";
+    content: "★" / "";
+    position: absolute;
+    top: -10px;
+    right: -8px;
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 28px;
+    border: 2px dotted var(--color-principal);
+    background-color: var(--color-superficie);
+    color: var(--color-principal);
+    font-size: 1rem;
+    transform: rotate(12deg);
+    pointer-events: none;
+}
+
+#formCarta input,
+#formCarta textarea {
+    background-color: var(--color-superficie);
+    color: var(--color-texto);
 }

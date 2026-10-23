@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -18,7 +18,7 @@
 
     <!-- BOTONES DE PRESENTACIÓN -->
     <div class="botones-presentacion">
-        <button id="btnSaluda">Saluda'm!</button>
+        <button id="btnSaluda">¡Salúdame!</button>
         <button id="btnPresenta">Me presento</button>
     </div>
 
@@ -28,7 +28,7 @@
     <!-- CARTA DE EJEMPLO -->
     <div class="carta">
         <h3>De: Maria</h3>
-        <p>Hola, com estàs? T'escric des del passat.</p>
+        <p>Hola, ¿cómo estás? Te escribo desde el pasado.</p>
     </div>
 
     <main>
@@ -40,8 +40,8 @@
 
         <!-- BARRA DE ACCIONES -->
         <div class="barra-acciones">
-            <button id="btnAfegir">Afegir carta de prova</button>
-            <button id="btnMostrarTaula">Mostrar taula</button>
+            <button id="btnAfegir">Añadir carta de prueba</button>
+            <button id="btnMostrarTaula" type="button" aria-controls="taulaCartes" aria-expanded="false">Mostrar tabla</button>
         </div>
 
         <!-- DISTRIBUCIÓN PRINCIPAL -->
@@ -60,13 +60,13 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Remitent</th>
-                                <th>Destinatari</th>
-                                <th>Contingut (resum)</th>
-                                <th>Accions</th>
+                                <th>Remitente</th>
+                                <th>Destinatario</th>
+                                <th>Contenido (resumen)</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
-
+                        
                         <tbody id="cosTaulaCartes">
                             <!-- Cartas añadidas con JavaScript -->
                         </tbody>
@@ -91,32 +91,32 @@
                 <!-- FORMULARIO PARA CREAR CARTAS -->
                 <form id="formCarta">
 
-                    <h3>✉️ Crear una nova carta</h3>
+                    <h3>✉️ Crear una nueva carta</h3>
 
                     <input
                         type="text"
                         id="remitent"
-                        placeholder="El teu nom"
+                        placeholder="Tu nombre"
                         required
                     >
 
                     <input
                         type="text"
                         id="destinatari"
-                        placeholder="A qui va dirigida?"
+                        placeholder="¿A quién va dirigida?"
                         required
                     >
 
                     <textarea
                         id="contingut"
-                        placeholder="Escriu la teva carta..."
+                        placeholder="Escribe tu carta..."
                         required
                     ></textarea>
 
                     <input
                         type="text"
                         id="personatge"
-                        placeholder="A quin personatge escrius? (ex: Einstein)"
+                        placeholder="¿A qué personaje escribes? (ej.: Einstein)"
                     >
 
                     <button type="submit">Enviar carta</button>
