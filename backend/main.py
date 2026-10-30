@@ -5,9 +5,13 @@ from pydantic import BaseModel
 # SEMANA 4
 import json
 import os
-
+from dotenv import load_dotenv
 # SEMANA 5 - CORS
 from fastapi.middleware.cors import CORSMiddleware
+
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 DATA_FILE = "cartas.json"
 
@@ -91,6 +95,28 @@ def eliminar_carta(id: int):
 
     raise HTTPException(status_code=404, detail="Carta no trobada")
 
+@app.put("/cartas/{id}")
+def actualitzar_carta(id: int, carta: Carta):
+    for i, c in enumerate(cartes):
+        if c["id"] == id:
+            # Actualitza totes les dades excepte l'ID
+            cartes[i] = {
+                "id": id,
+                "remitent": carta.remitent,
+                "destinatari": carta.destinatari,
+                "contingut": carta.contingut,
+                "personatge": carta.personatge
+            }
+            guardar_cartes(cartes)          # ⭐ persisteix al fitxer
+            return cartes[i]
+    raise HTTPException(status_code=404, detail="Carta no trobada")
+# SEMANA 7
+@app.get("/config")
+def config():
+    return {
+        "debug": DEBUG,
+        "ia_configurada": GEMINI_API_KEY is not None and GEMINI_API_KEY != ""
+    }
 
 # SEMANA 4
 def cargar_cartes():

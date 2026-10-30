@@ -14,6 +14,7 @@
     <!-- HEADER -->
     <header>
         <h1 id="principalTitle">El Cartero Invisible</h1>
+        <button type="button" id="btnCanviarTema">🌙 Modo oscuro</button>
     </header>
 
     <!-- BOTONES DE PRESENTACIÓN -->
@@ -133,7 +134,34 @@
     <footer>
         <p>&copy; 2026 El Cartero Invisible</p>
     </footer>
+<dialog id="modalEditarCarta" aria-labelledby="tituloEditar">
+    <form id="formEditarCarta" method="dialog">
+        <h2 id="tituloEditar">Editar carta</h2>
 
+        <label>
+            Remitente
+            <input type="text" name="remitent">
+        </label>
+
+        <label>
+            Destinatario
+            <input type="text" name="destinatari">
+        </label>
+
+        <label>
+            Contenido
+            <textarea name="contingut"></textarea>
+        </label>
+
+        <label>
+            Personaje
+            <input type="text" name="personatge">
+        </label>
+
+        <button type="submit">Guardar</button>
+    <button type="button" id="btnCerrarEditar">Cancelar</button>
+    </form>
+</dialog>
     <!-- JAVASCRIPT -->
     <script type="module" src="script.js"></script>
 

@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "remitent": "Erik",
+    "destinatari": "Xavi",
+    "contingut": "GFGFG",
+    "personatge": "aaa",
+    "id": 1
+  }
+]
