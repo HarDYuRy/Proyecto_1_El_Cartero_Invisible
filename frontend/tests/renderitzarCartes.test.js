@@ -1,4 +1,4 @@
-import { renderitzarCartes } from '../script.js';
+import { renderitzarCartes } from '../js/dom.js';
 
 
 test('renderitza les cartes correctament', () => {

@@ -1,64 +1,61 @@
-// 1. IMPORTAR JEST: Obligatorio en entornos ES Modules ("type": "module")
+import { refrescarLlista } from "../js/app.js";
+import { gestionarError } from "../js/dom.js";
 import { jest } from '@jest/globals';
 import '@testing-library/jest-dom';
-
-
-// 2. IMPORTAR TU FUNCIÓN: Ajusta la ruta si tu script está en otra carpeta
-import { carregarCartes } from '../script.js';
-
-
-// El DOM ya está preparado gracias a setup.js
-global.alert = jest.fn();
-
+import { carregarCartes } from '../js/api.js';
 
 beforeEach(() => {
-    jest.clearAllMocks();
-    // Solo limpiamos el contenido, pero los contenedores ya existen
+    jest.useFakeTimers();
+    global.fetch = jest.fn();
+    global.alert = jest.fn();
     document.getElementById('contenidorCartes').innerHTML = '';
+    const avis = document.getElementById('missatgeError');
+    avis.textContent = '';
+    avis.classList.remove('visible');
 });
 
+afterEach(() => {
+    jest.clearAllTimers();
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+});
 
-test('carregarCartes carrega les cartes correctament i actualitza el DOM', async () => {
+test('carregarCartes carrega les cartes amb cookies i actualitza el DOM', async () => {
     const mockCartes = [
         { id: 1, remitent: 'Maria', contingut: 'Hola' },
         { id: 2, remitent: 'Joan', contingut: 'Adéu' }
     ];
-
-
-    global.fetch = jest.fn().mockResolvedValue({
+    global.fetch.mockResolvedValue({
         ok: true,
-        json: async () => mockCartes,
+        json: async () => mockCartes
     });
 
+    await refrescarLlista().catch(error => gestionarError(error, "Error carregant cartes:"));
 
-    await carregarCartes();
-
-
-    expect(global.fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/cartes');
-    const cartesElements = document.querySelectorAll('.carta');
-    expect(cartesElements.length).toBe(2);
+    expect(global.fetch).toHaveBeenCalledWith(
+        'http://127.0.0.1:8000/cartas', { credentials: 'include' }
+    );
+    expect(document.querySelectorAll('.carta')).toHaveLength(2);
+    expect(document.querySelector('#missatgeError')).not.toHaveClass('visible');
+    expect(global.alert).not.toHaveBeenCalled();
 });
 
+test("carregarCartes mostra un avis de xarxa i l'amaga al cap de 5 segons", async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    global.fetch.mockRejectedValue(new TypeError('Network error'));
 
-test('carregarCartes mostra un alert si falla la xarxa', async () => {
-    const consoleSpy = jest
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+    await refrescarLlista().catch(error => gestionarError(error, "Error carregant cartes:"));
 
-    try {
-        global.fetch = jest.fn().mockRejectedValue(new Error('Network error'));
+    const avis = document.querySelector('#missatgeError');
+    expect(avis).toHaveTextContent(
+        "No s'ha pogut connectar al servidor. Comprova que està en marxa."
+    );
+    expect(avis).toHaveClass('visible');
+    expect(global.alert).not.toHaveBeenCalled();
 
-        await carregarCartes();
-
-        expect(global.alert).toHaveBeenCalledWith(
-            "No s'han pogut carregar les cartes. Comprova que el servidor està en marxa."
-        );
-
-        expect(consoleSpy).toHaveBeenCalledWith(
-            'Error al cargar las cartas:',
-            expect.any(Error)
-        );
-    } finally {
-        consoleSpy.mockRestore();
-    }
+    jest.advanceTimersByTime(4999);
+    expect(avis).toHaveClass('visible');
+    jest.advanceTimersByTime(1);
+    expect(avis).not.toHaveClass('visible');
+    expect(avis).toBeEmptyDOMElement();
 });

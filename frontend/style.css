@@ -201,7 +201,7 @@ button:focus-visible {
 
 .layout-cartes {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-columns: minmax(0, 1fr) minmax(450px, 480px);
     gap: 30px;
     align-items: start;
 }
@@ -281,7 +281,8 @@ button:focus-visible {
 #formCarta {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    min-height: 360px;
     max-width: 100%;
     margin: 0;
 }
@@ -294,6 +295,8 @@ button:focus-visible {
 
 #formCarta input,
 #formCarta textarea {
+    flex: 1;
+    min-width: 200px;
     padding: 10px;
     border: 1px solid var(--color-borde);
     border-radius: 5px;
@@ -310,15 +313,49 @@ button:focus-visible {
 }
 
 #formCarta textarea {
-    min-height: 100px;
+    flex-grow: 1;
+    flex-basis: 120px;
+    min-height: 120px;
     resize: vertical;
 }
 
 #formCarta button {
-    width: 100%;
+    align-self: flex-end;
+    width: auto;
+    max-width: 100%;
     padding: 11px 20px;
 }
 
+
+/* Flexbox: la fila es plega quan no hi caben dos camps de 200px. */
+#formCarta .fila-camps {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+#formCarta .fila-camps input {
+    flex-basis: 200px;
+    width: 0;
+}
+
+/* El camp de personatge conserva l'altura; el textarea ocupa l'espai lliure. */
+#formCarta > input {
+    flex: 0 1 auto;
+}
+
+@media (max-width: 600px) {
+    #formCarta .fila-camps input {
+        flex-basis: 100%;
+        width: 100%;
+    }
+
+    #formCarta input,
+    #formCarta textarea {
+        min-width: min(200px, 100%);
+    }
+}
 
 /* ==================================
    TABLA DE CARTAS
@@ -360,12 +397,95 @@ button:focus-visible {
     position: fixed;
     bottom: 20px;
     right: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto auto 10px auto;
+    grid-template-areas:
+        "segell segell segell"
+        "text text text"
+        "obertura obertura obertura"
+        "sobre . .";
+    gap: 10px;
+    align-items: center;
+    width: min(220px, calc(100vw - 40px));
+    box-sizing: border-box;
     background-color: var(--color-principal);
     color: var(--color-superficie);
     padding: 16px;
-    border-radius: 10px;
+    border: 2px solid var(--color-borde);
+    border-radius: 24px 24px 12px 12px;
     box-shadow: 0 4px 12px var(--sombra-buzon);
     z-index: 1000;
+    pointer-events: none;
+}
+
+/* M09: cada peça ocupa una àrea amb nom. */
+#buzon .segell {
+    grid-area: segell;
+    justify-self: center;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+#buzon .text {
+    grid-area: text;
+    margin: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+#buzon .obertura {
+    grid-area: obertura;
+    height: 10px;
+    border-radius: 999px;
+    background-color: var(--color-activo);
+    box-shadow: inset 0 3px 5px var(--sombra-buzon);
+}
+
+#buzon .sobre {
+    grid-area: sobre;
+    justify-self: center;
+    font-size: 1.6rem;
+    line-height: 1;
+}
+
+/* Posició manual: quarta fila, de la línia 2 a la 4 (dues columnes). */
+#buzon .estat {
+    grid-column: 2 / 4;
+    grid-row: 4;
+    margin: 0;
+    padding: 6px 8px;
+    border-radius: 999px;
+    background-color: var(--color-superficie);
+    color: var(--color-texto);
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* Espai per poder desplaçar el contingut per damunt del buzón fix. */
+body {
+    padding-bottom: 220px;
+}
+
+@media (max-width: 600px) {
+    #buzon {
+        bottom: 12px;
+        right: 12px;
+        width: min(180px, calc(100vw - 24px));
+        gap: 6px;
+        padding: 12px;
+    }
+
+    #buzon .segell {
+        font-size: 1.6rem;
+    }
+
+    #buzon .text {
+        font-size: 0.8rem;
+    }
 }
 
 
@@ -675,4 +795,19 @@ footer {
         grid-template-columns: minmax(0, 1fr);
         padding: 10px;
     }
+}
+
+/* Missatges d'error: ocults fins que s'afegeix la classe visible */
+#missatgeError {
+    display: none;
+    background: #fdecea;
+    color: #b71c1c;
+    border: 1px solid #f5c6cb;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+#missatgeError.visible {
+    display: block;
 }

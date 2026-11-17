@@ -3,7 +3,7 @@ import {
     aplicarTemaGuardat, canviarTema,
     guardarUltimPersonatge, preomplirUltimPersonatge,
     guardarCartaEnProces, recuperarCartaEnProces
-} from '../script.js';
+} from '../js/dom.js';
 
 
 beforeEach(() => {

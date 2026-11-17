@@ -15,8 +15,10 @@
     <header>
         <h1 id="principalTitle">El Cartero Invisible</h1>
         <button type="button" id="btnCanviarTema">🌙 Modo oscuro</button>
+        <p id="benvinguda"></p>
+        <button id="btnEsborrarCarnet" type="button">Esborrar carnet</button>
     </header>
-
+    <div id="missatgeError" aria-live="polite" aria-atomic="true"></div>
     <!-- BOTONES DE PRESENTACIÓN -->
     <div class="botones-presentacion">
         <button id="btnSaluda">¡Salúdame!</button>
@@ -35,8 +37,12 @@
     <main>
 
         <!-- BUZÓN -->
-        <div id="buzon">
-            <span>📮</span>
+        <div id="buzon" role="region" aria-label="Bústia de correu" lang="ca">
+            <span class="segell" aria-hidden="true">📮</span>
+            <p class="text">El teu racó de correu</p>
+            <div class="obertura" aria-hidden="true"></div>
+            <span class="sobre" aria-hidden="true">✉️</span>
+            <p class="estat">T'esperem!</p>
         </div>
 
         <!-- BARRA DE ACCIONES -->
@@ -94,19 +100,21 @@
 
                     <h3>✉️ Crear una nueva carta</h3>
 
-                    <input
-                        type="text"
-                        id="remitent"
-                        placeholder="Tu nombre"
-                        required
-                    >
-
-                    <input
-                        type="text"
-                        id="destinatari"
-                        placeholder="¿A quién va dirigida?"
-                        required
-                    >
+                    <div class="fila-camps">
+                        <input
+                            type="text"
+                            id="remitent"
+                            placeholder="Tu nombre"
+                            required
+                        >
+    
+                        <input
+                            type="text"
+                            id="destinatari"
+                            placeholder="¿A quién va dirigida?"
+                            required
+                        >
+                    </div>
 
                     <textarea
                         id="contingut"
@@ -163,7 +171,7 @@
     </form>
 </dialog>
     <!-- JAVASCRIPT -->
-    <script type="module" src="script.js"></script>
+    <script type="module" src="js/app.js"></script>
 
 </body>
 

@@ -1,6 +1,5 @@
-
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Request, Response
+from pydantic import BaseModel, Field
 
 # SEMANA 4
 import json
@@ -8,6 +7,8 @@ import os
 from dotenv import load_dotenv
 # SEMANA 5 - CORS
 from fastapi.middleware.cors import CORSMiddleware
+from uuid import uuid4
+
 
 load_dotenv()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -31,16 +32,26 @@ app.add_middleware(
 
 
 class Carta(BaseModel):
-    remitent: str
-    destinatari: str
-    contingut: str
-    personatge: str
+    remitent: str = Field(min_length=1)
+    destinatari: str = Field(min_length=1)
+    contingut: str = Field(min_length=1)
+    personatge: str = Field(min_length=1)
+    usuari_id: str | None = None
 
 
 # SEMANA 5 - Crear una carta amb un ID únic
-@app.post("/cartas")
-def crear_carta(carta: Carta):
+@app.post("/cartas", status_code=201)
+def crear_carta(carta: Carta, request: Request):
+    if not carta.contingut.strip():
+        raise HTTPException(
+            status_code=422,
+            detail="El contingut no pot estar buit"
+        )
+
     nova_carta = carta.model_dump()
+
+    # Agafar l'identificador de la cookie
+    nova_carta["usuari_id"] = request.cookies.get("usuari_id")
 
     nova_carta["id"] = max(
         (c["id"] for c in cartes),
@@ -58,7 +69,7 @@ def root():
     return {"missatge": "Hola, món!"}
 
 
-@app.get("/cartes")
+@app.get("/cartas")
 def llistar_cartes(limit: int = 10, offset: int = 0, personaje: str | None = None):
     resultat = cartes
 
@@ -71,41 +82,50 @@ def llistar_cartes(limit: int = 10, offset: int = 0, personaje: str | None = Non
     return resultat[offset:offset + limit]
 
 
-@app.get("/cartes/{id}")
+@app.get("/cartas/{id}")
 def obtenir_carta(id: int):
-    # SEMANA 5 - Buscar la carta real per ID
-    for c in cartes:
-        if c["id"] == id:
-            return c
+    for carta in cartes:
+        if carta["id"] == id:
+            return carta
 
-    raise HTTPException(status_code=404, detail="Carta no encontrada")
+    raise HTTPException(
+        status_code=404,
+        detail="Carta no trobada"
+    )
 
 
 # SEMANA 4
 # SEMANA 5 - Eliminar una carta real del servidor
-@app.delete("/cartes/{id}")
+@app.delete("/cartas/{id}", status_code=204)
 def eliminar_carta(id: int):
-    global cartes
-
-    for c in cartes:
-        if c["id"] == id:
-            cartes.remove(c)
+    for carta in cartes:
+        if carta["id"] == id:
+            cartes.remove(carta)
             guardar_cartes(cartes)
-            return {"missatge": "Carta eliminada"}
+            return Response(status_code=204)
 
-    raise HTTPException(status_code=404, detail="Carta no trobada")
+    raise HTTPException(
+        status_code=404,
+        detail="Carta no trobada"
+    )
 
 @app.put("/cartas/{id}")
 def actualitzar_carta(id: int, carta: Carta):
     for i, c in enumerate(cartes):
         if c["id"] == id:
+            if not carta.contingut.strip():
+                raise HTTPException(
+                    status_code=422,
+                    detail="El contingut no pot estar buit"
+                )
             # Actualitza totes les dades excepte l'ID
             cartes[i] = {
                 "id": id,
                 "remitent": carta.remitent,
                 "destinatari": carta.destinatari,
                 "contingut": carta.contingut,
-                "personatge": carta.personatge
+                "personatge": carta.personatge,
+                "usuari_id": c.get("usuari_id")
             }
             guardar_cartes(cartes)          # ⭐ persisteix al fitxer
             return cartes[i]
@@ -117,6 +137,77 @@ def config():
         "debug": DEBUG,
         "ia_configurada": GEMINI_API_KEY is not None and GEMINI_API_KEY != ""
     }
+
+# SEMANA 8
+@app.get("/perfil")
+def obtenir_perfil(request: Request, response: Response):
+    usuari_id = request.cookies.get("usuari_id")
+
+    if not usuari_id:
+        raise HTTPException(
+            status_code=401,
+            detail="No hi ha cap usuari identificat"
+        )
+
+    # Llegir el comptador i incrementar-lo.
+    try:
+        visites = max(0, int(request.cookies.get("visites", "0")))
+    except ValueError:
+        visites = 0
+
+    visites += 1
+
+    # Guardar el nou valor durant 30 dies.
+    response.set_cookie(
+        key="visites",
+        value=str(visites),
+        max_age=30 * 24 * 60 * 60,
+        path="/",
+        samesite="lax"
+    )
+
+    cartes_usuari = [
+        carta for carta in cartes
+        if carta.get("usuari_id") == usuari_id
+    ]
+
+    return {
+        "usuari_id": usuari_id,
+        "visites": visites,
+        "cartes": cartes_usuari
+    }
+
+@app.post("/login")
+def login(request: Request, response: Response):
+    # Conservar el carnet existent o generar-ne un de nou
+    usuari_id = (
+        request.cookies.get("usuari_id")
+        or "user_" + uuid4().hex[:8]
+    )
+
+    response.set_cookie(
+        key="usuari_id",
+        value=usuari_id,
+        max_age=30 * 24 * 60 * 60,
+        path="/",
+        samesite="lax",
+        httponly=False
+    )
+
+    return {
+        "missatge": "Sessió iniciada",
+        "usuari_id": usuari_id
+    }
+
+
+@app.delete("/logout")
+def logout(response: Response):
+    response.delete_cookie(
+        key="usuari_id",
+        path="/"
+    )
+
+    return {"missatge": "Sessió tancada"}
 
 # SEMANA 4
 def cargar_cartes():

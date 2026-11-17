@@ -5,5 +5,21 @@
     "contingut": "GFGFG",
     "personatge": "aaa",
     "id": 1
+  },
+  {
+    "remitent": "Erik",
+    "destinatari": "cxasda",
+    "contingut": "wiwi",
+    "personatge": "aaa",
+    "usuari_id": "user_lx4f9c1o",
+    "id": 2
+  },
+  {
+    "remitent": "hpla",
+    "destinatari": "aijisd",
+    "contingut": "akshdkaj",
+    "personatge": "akjshdkja",
+    "usuari_id": "user_q4ju0nt6",
+    "id": 3
   }
 ]

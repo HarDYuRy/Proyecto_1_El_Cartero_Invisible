@@ -44,9 +44,9 @@ async def test_llistar_cartes():
                 "contingut": "Carta de prova",
                 "personatge": "Carter"
             })
-            assert creada.status_code == 200
+            assert creada.status_code == 201
 
-        response = await ac.get("/cartes")
+        response = await ac.get("/cartas")
 
     assert response.status_code == 200
     assert len(response.json()) == 3
@@ -65,9 +65,9 @@ async def test_limit_cartes():
                 "contingut": "Carta de prova",
                 "personatge": "Carter"
             })
-            assert creada.status_code == 200
+            assert creada.status_code == 201
 
-        response = await ac.get("/cartes?limit=2")
+        response = await ac.get("/cartas?limit=2")
 
     assert response.status_code == 200
     assert len(response.json()) == 2
@@ -86,9 +86,9 @@ async def test_offset_cartes():
                 "contingut": "Carta de prova",
                 "personatge": "Carter"
             })
-            assert creada.status_code == 200
+            assert creada.status_code == 201
 
-        response = await ac.get("/cartes?offset=1")
+        response = await ac.get("/cartas?offset=1")
 
     assert response.status_code == 200
     assert len(response.json()) == 2
@@ -107,7 +107,7 @@ async def test_filtrar_personaje():
             "contingut": "Carta 1",
             "personatge": "Carter"
         })
-        assert creada.status_code == 200
+        assert creada.status_code == 201
 
         creada = await ac.post("/cartas", json={
             "remitent": "Xavi",
@@ -115,9 +115,9 @@ async def test_filtrar_personaje():
             "contingut": "Carta 2",
             "personatge": "Professor"
         })
-        assert creada.status_code == 200
+        assert creada.status_code == 201
 
-        response = await ac.get("/cartes?personaje=Professor")
+        response = await ac.get("/cartas?personaje=Professor")
 
     assert response.status_code == 200
     assert len(response.json()) == 1
@@ -138,10 +138,10 @@ async def test_obtenir_carta():
         base_url="http://test"
     ) as ac:
         creada = await ac.post("/cartas", json=nova_carta)
-        assert creada.status_code == 200
+        assert creada.status_code == 201
 
         carta_creada = creada.json()
-        response = await ac.get(f"/cartes/{carta_creada['id']}")
+        response = await ac.get(f"/cartas/{carta_creada['id']}")
 
     assert response.status_code == 200
     assert response.json() == carta_creada
@@ -153,11 +153,11 @@ async def test_carta_no_existeix():
         transport=ASGITransport(app=app),
         base_url="http://test"
     ) as ac:
-        response = await ac.get("/cartes/99")
+        response = await ac.get("/cartas/99")
 
     assert response.status_code == 404
     assert response.json() == {
-        "detail": "Carta no encontrada"
+        "detail": "Carta no trobada"
     }
 
 
@@ -176,8 +176,8 @@ async def test_crear_carta():
     ) as ac:
         response = await ac.post("/cartas", json=nova_carta)
 
-    assert response.status_code == 200
-    assert response.json() == {**nova_carta, "id": 1}
+    assert response.status_code == 201
+    assert response.json() == {**nova_carta, "id": 1, "usuari_id": None}
 
 
 @pytest.mark.asyncio
@@ -194,10 +194,10 @@ async def test_carta_es_guarda():
         base_url="http://test"
     ) as ac:
         creada = await ac.post("/cartas", json=nova_carta)
-        assert creada.status_code == 200
-        assert creada.json() == {**nova_carta, "id": 1}
+        assert creada.status_code == 201
+        assert creada.json() == {**nova_carta, "id": 1, "usuari_id": None}
 
-        response = await ac.get("/cartes")
+        response = await ac.get("/cartas")
 
     assert response.status_code == 200
     assert response.json() == [creada.json()]
@@ -238,8 +238,8 @@ async def test_persistencia_post():
     ) as ac:
         response = await ac.post("/cartas", json=payload)
 
-    assert response.status_code == 200
-    assert response.json() == {**payload, "id": 1}
+    assert response.status_code == 201
+    assert response.json() == {**payload, "id": 1, "usuari_id": None}
 
     with open(main.DATA_FILE, "r", encoding="utf-8") as f:
         dades_despres = json.load(f)
@@ -262,15 +262,15 @@ async def test_delete_carta():
         base_url="http://test"
     ) as ac:
         creada = await ac.post("/cartas", json=nova_carta)
-        assert creada.status_code == 200
+        assert creada.status_code == 201
 
         carta_id = creada.json()["id"]
 
-        response = await ac.delete(f"/cartes/{carta_id}")
-        consulta = await ac.get(f"/cartes/{carta_id}")
+        response = await ac.delete(f"/cartas/{carta_id}")
+        consulta = await ac.get(f"/cartas/{carta_id}")
 
-    assert response.status_code == 200
-    assert response.json() == {"missatge": "Carta eliminada"}
+    assert response.status_code == 204
+    assert response.content == b""
     assert consulta.status_code == 404
 
     with open(main.DATA_FILE, "r", encoding="utf-8") as f:
@@ -286,7 +286,7 @@ async def test_cors_headers():
         base_url="http://test"
     ) as ac:
         response = await ac.get(
-            "/cartes",
+            "/cartas",
             headers={"Origin": "http://127.0.0.1:5500"}
         )
 
@@ -302,7 +302,8 @@ async def test_get_cartes():
         transport=ASGITransport(app=app),
         base_url="http://test"
     ) as ac:
-        response = await ac.get("/cartes")
+        response = await ac.get("/cartas")
 
     assert response.status_code == 200
     assert response.json() == []
+    
